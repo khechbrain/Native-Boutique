@@ -5,7 +5,7 @@ import { useSelector,useDispatch } from 'react-redux';
 import ActionRedux from '../../redux/action';
 import { operationEntree } from '../../utils/OperationsTypes';
 import { primaryColor } from '../../utils/ThemeColors';
-import { listEntree_KEY } from '../HomePage';
+import { listEntree_KEY, listSorties_KEY } from '../HomePage';
 import ToolbarComponent from '../ToolbarComponent';
 import Toast from 'react-native-toast-message';
 
@@ -30,7 +30,7 @@ const AddApprovisionnement = (props) => {
             visibilityTime:2000
           });
           setTimeout(() => {
-            navigation.navigate(listSorties_KEY)
+            navigation.navigate(listEntree_KEY)
           }, 2000);
       })
       .catch(error => console.log(error))

@@ -64,7 +64,8 @@ const HomePage = () => {
             inactiveTintColor: 'grey',
             labelStyle: { paddingBottom: 10, fontSize: 10 },
             style: { padding: 10, height: 70}
-            }}>
+            }}
+            >
             <Tab.Screen name={listProduct_KEY} component={ProductsList} />
             <Tab.Screen  name={addProduct_KEY} component={AddProduct} />
             <Tab.Screen  name={detailsProduct_KEY} component={DetailsProduct} />
