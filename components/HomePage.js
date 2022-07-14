@@ -1,79 +1,80 @@
-import axios from 'axios';
-import { useEffect } from 'react';
-import { Button, StyleSheet, Text, ToastAndroid, View, List} from 'react-native';
-import { baseUrl } from '../utils/ApiInfos';
-import { Navigate, Route, Routes, useNavigate } from "react-router-native";
-import {useSelector,useDispatch} from 'react-redux'
-import ActionRedux from '../redux/action';
-import Categories from './category/Categories';
-import Products from './products/Products';
+import React from 'react';
+import { Alert, StyleSheet,TouchableOpacity,View } from 'react-native';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Approvisionnement from './approvisionnement/Approvisionnement';
 import Ventes from './ventes/Ventes';
+import Products from './products/Products';
+import ToolbarComponent from './ToolbarComponent';
+import { primaryColor } from '../utils/ThemeColors';
+import ProductsList from './products/ProductsList';
+import AddProduct from './products/AddProduct';
 
-import { Toolbar, ToolbarBackAction, ToolbarContent, ToolbarAction } from 'react-native-paper';
+//Screen names
+const homeName = "Produits";
+const entrees = "Approvisionnements";
+const sorties = "Ventes";
+// const addProduct = "addProduct";
 
-export default function HomePage() {
+const Tab = createBottomTabNavigator();
 
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  let store = useSelector((state)=> state)
-  
-  useEffect(()=>{
-    ActionRedux.categories.setCategoryList(dispatch)
-    ActionRedux.products.setProductList(dispatch)
-  },[])
-  const showStore = ()=>{
-    console.log("Ma Boutique:\n",store);
-  }
+const HomePage = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.toolbar}>
-        <Toolbar>
-          <ToolbarBackAction
-            onPress={()=> navigate(-1)}
-          />
-          <ToolbarContent
-            title="Ma boutique"
-          />
-          {/* <ToolbarAction icon="search" 
-            // onPress={this._onSearch}
-           />
-          <ToolbarAction icon="more-vert" 
-            // onPress={this._onMore}
-             /> */}
-        </Toolbar>
+    <>
+      <View >
+        <ToolbarComponent/>
       </View>
-      <Routes>
-        {/* <Route path='' element={
-          <View>
-            <Text >Accueil</Text>
-            <Button onPress={()=>navigate('categories')}  title='Liste des catégories'></Button>
-            <Button onPress={()=>navigate('products')} title='Liste des produits'></Button>
-            <Button onPress={()=>navigate('approvisionnement')} title='Liste des entrées'></Button>
-            <Button onPress={()=>navigate('ventes')} title='Liste des sorties'></Button>
-          </View>
-        }></Route> */}
-        <Route path='' element={<Navigate to={'products'}/>}></Route>
-        <Route path='categories/*' element={<Categories/>}></Route>
-        <Route path='products/*' element={<Products/>}></Route>
-        <Route path='approvisionnement/*' element={<Approvisionnement/>}></Route>
-        <Route path='ventes/*' element={<Ventes/>}></Route>
-      </Routes>
-    </View>
+      <NavigationContainer>
+        <Tab.Navigator
+            initialRouteName={homeName}
+            screenOptions={({ route }) => ({
+            // tabBarButton:(props)=> {
+            //   console.log(props)
+            //   return <TouchableOpacity {...props} ></TouchableOpacity>
+            // },
+            tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
+                let rn = route.name;
+
+                if (rn === homeName) {
+                iconName = focused ? 'cube' : 'cube-outline';
+
+                } else if (rn === entrees) {
+                iconName = focused ? 'add-circle' : 'add-circle-outline';
+
+                } else if (rn === sorties) {
+                iconName = focused ? 'remove-circle' : 'remove-circle-outline';
+                }
+
+                // You can return any component that you like here!
+                return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            })}
+            tabBarOptions={{
+            activeTintColor: primaryColor,
+            inactiveTintColor: 'grey',
+            labelStyle: { paddingBottom: 10, fontSize: 10 },
+            style: { padding: 10, height: 70}
+            }}>
+
+            <Tab.Screen name={homeName} component={Products} />
+            <Tab.Screen name={entrees} component={Approvisionnement} />
+            <Tab.Screen name={sorties} component={Ventes} />
+
+            {/* <Tab.Screen  name={addProduct} component={AddProduct} /> */}
+
+        </Tab.Navigator>
+      </NavigationContainer>
+    </>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width:"100%",
-    backgroundColor: '#fff',
-    alignItems: 'center',
-  },
-  toolbar:{
-    width:'100%',
-  },
-  backBtn:{
-    width:'10%',
+  container:{
+
   }
-});
+})
+
+export default HomePage;

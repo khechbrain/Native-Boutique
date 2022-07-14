@@ -24,7 +24,7 @@ const categories = {
             })
             .then(response => {
                 console.log(response.data);
-                this.setCategoryList(dispatch)
+                this.getCategoryList(dispatch)
                 resolve(response.data)
             })
             .catch(error => console.log("Erreur: ", error))
@@ -39,7 +39,7 @@ const categories = {
         })
         .then(response => {
             console.log(response.data);
-            this.setCategoryList(dispatch)
+            this.getCategoryList(dispatch)
         })
         .catch(error => console.log("Erreur: ", error))
     },
@@ -56,19 +56,25 @@ const categories = {
             })
             .then(response => {
                 console.log(response.data);
-                this.setCategoryList(dispatch)
+                this.getCategoryList(dispatch)
                 resolve(response.data)
             })
             .catch(error => console.log("Erreur: ", error))
             })
     },
-    setCategoryList(dispatch){
-        axios.post(baseUrl+"get_categories",{})
-        .then(response => {
-            // console.log(response.data.result.response);
-            dispatch({type:SET_CATEGORYLIST_KEY,payload:response.data.result.response})
+    getCategoryList(dispatch){
+        return new Promise((resolve,reject)=>{
+            axios.post(baseUrl+"get_categories",{})
+            .then(response => {
+                // console.log(response.data.result.response);
+                dispatch({type:SET_CATEGORYLIST_KEY,payload:response.data.result.response})
+                resolve(response)
+            })
+            .catch(error => {
+                console.log("Erreur: ", error)
+                reject(error)
+            })
         })
-        .catch(error => console.log("Erreur: ", error))
     },
 }
 export default categories

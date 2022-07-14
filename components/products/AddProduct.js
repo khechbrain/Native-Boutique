@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { StyleSheet, TextInput, View,Text, Button } from "react-native";
+import { StyleSheet, TextInput, View,Text, Button, TouchableOpacity } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import { useSelector } from "react-redux";
 import ActionRedux from "../../redux/action";
+import { primaryColor } from "../../utils/ThemeColors";
+import ToolbarComponent from "../ToolbarComponent";
 
-const AddProduct = () => {
+const AddProduct = (props) => {
 
     const [name,setName] = useState('')
     const [description,setDescription] = useState('')
@@ -25,56 +27,63 @@ const AddProduct = () => {
       ActionRedux.products.addProduct(product)
     }
     return (
-        <View style={styles.container}>
-            <Text>َAjouter un produit</Text>
-            <View style={styles.inputView}>
-                <TextInput
-                    placeholder="Nom"
-                    style={styles.TextInput}
-                    placeholderTextColor="#003f5c"
-                    onChangeText={(text) => setName(text)}
-                    />
+        <View >
+            {/* <ToolbarComponent {...props} /> */}
+            <View style={styles.container}>
+              <Text style={styles.titleText}>Ajouter un produit</Text>
+              <View style={styles.inputView}>
+                  <TextInput
+                      placeholder="Nom"
+                      style={styles.TextInput}
+                      placeholderTextColor="#003f5c"
+                      onChangeText={(text) => setName(text)}
+                      />
+              </View>
+              <View style={styles.inputView}>
+                  <TextInput
+                      placeholder="Description"
+                      style={styles.TextInput}
+                      placeholderTextColor="#003f5c"
+                      onChangeText={(text) => setDescription(text)}
+                      />
+              </View>
+              <View style={styles.inputView}>
+                  <TextInput
+                      placeholder="Quantité"
+                      style={styles.TextInput}
+                      placeholderTextColor="#003f5c"
+                      onChangeText={(text) => setQTE(text)}
+                      />
+              </View>
+              <View style={styles.inputView}>
+                  <TextInput
+                      placeholder="Prix unitaire"
+                      style={styles.TextInput}
+                      placeholderTextColor="#003f5c"
+                      onChangeText={(text) => setPU(text)}
+                      />
+              </View>
+              <View style={styles.inputView}>
+                      <SelectDropdown
+                          selectedRowTextStyle = {styles.titleText}
+                          buttonStyle={styles.inputView}
+                          data={categories}
+                          onSelect={(selectedItem, index) => {
+                              console.log("selectedItem", selectedItem.id)
+                              setCategorytId(selectedItem.id)
+                          }}
+                          buttonTextAfterSelection={(selectedItem, index) => {
+                            return selectedItem.name
+                          }}
+                          rowTextForSelection={(item, index) => {
+                            return item.name
+                          }}
+                      />
+              </View>
+              <TouchableOpacity onPress={submit} style={styles.loginBtn}>
+                <Text style={styles.loginText}>Ajouter</Text>
+              </TouchableOpacity>
             </View>
-            <View style={styles.inputView}>
-                <TextInput
-                    placeholder="Description"
-                    style={styles.TextInput}
-                    placeholderTextColor="#003f5c"
-                    onChangeText={(text) => setDescription(text)}
-                    />
-            </View>
-            <View style={styles.inputView}>
-                <TextInput
-                    placeholder="Quantité"
-                    style={styles.TextInput}
-                    placeholderTextColor="#003f5c"
-                    onChangeText={(text) => setQTE(text)}
-                    />
-            </View>
-            <View style={styles.inputView}>
-                <TextInput
-                    placeholder="Prix unitaire"
-                    style={styles.TextInput}
-                    placeholderTextColor="#003f5c"
-                    onChangeText={(text) => setPU(text)}
-                    />
-            </View>
-            <View style={styles.inputView}>
-                    <SelectDropdown
-                        data={categories}
-                        onSelect={(selectedItem, index) => {
-                            console.log("selectedItem", selectedItem.id)
-                            setCategorytId(selectedItem.id)
-                        }}
-                        buttonTextAfterSelection={(selectedItem, index) => {
-                          return selectedItem.name
-                        }}
-                        rowTextForSelection={(item, index) => {
-                          return item.name
-                        }}
-                    />
-            </View>
-            <Button style={styles.loginBtn} title="Ajouter" onPress={submit}></Button>
         </View>
     );
 };
@@ -84,35 +93,35 @@ const styles = StyleSheet.create({
       width:"100%",
       flex: 1,
       alignItems: "center",
-      justifyContent: "center",
+      // justifyContent: "center",
     },
-   
-    image: {
-      marginBottom: 40,
+    titleText:{
+      fontSize:20,
+      fontWeight:'bold',
+      marginBottom:15
     },
-   
     inputView: {
-      backgroundColor: "#FFC0CB",
+      backgroundColor: "#ccc",
       borderRadius: 30,
-      width: "70%",
+      width: "80%",
       height: 45,
       marginBottom: 20,
-   
+  
       alignItems: "center",
     },
-   
+  
     TextInput: {
       height: 50,
       flex: 1,
       padding: 10,
       marginLeft: 20,
     },
-   
+  
     forgot_button: {
       height: 30,
       marginBottom: 30,
     },
-   
+  
     loginBtn: {
       width: "80%",
       borderRadius: 25,
@@ -120,7 +129,11 @@ const styles = StyleSheet.create({
       alignItems: "center",
       justifyContent: "center",
       marginTop: 40,
-      backgroundColor: "#FF1493",
+      backgroundColor: primaryColor,
     },
+    loginText:{
+      color:'white',
+      fontWeight:'bold'
+    }
   });
 export default AddProduct;

@@ -1,10 +1,15 @@
-import { Text, View,Image, ScrollView, Button, Modal, Pressable, StyleSheet } from 'react-native';
+import { Text, View,Image, ScrollView, Button, Modal, Pressable, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import BootstrapStyleSheet from 'react-native-bootstrap-styles';
 import ActionRedux from '../../redux/action';
 import {Route, Routes, useNavigate} from 'react-router-native'
+import { useEffect } from 'react';
+import CategoriesList from '../category/CategoriesList';
+import { primaryColor } from '../../utils/ThemeColors';
+import ToolbarComponent from '../ToolbarComponent';
 
-const ProductsList = () => {
+const ProductsList = (props) => {
+    const { navigation, route } = props
     
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -22,7 +27,7 @@ const ProductsList = () => {
                 backgroundColor:'white'
             },
             s.rounded,
-            s.shadow
+            s.shadow,
         ],
         title:[ 
             s.textCenter,
@@ -40,7 +45,14 @@ const ProductsList = () => {
             s.textCenter,
             s.h6,
             s.textDark,
-            s.textNoWrap
+            s.textNoWrap,
+            s.mr4
+        ],
+        qte:[
+            s.h6,
+            {
+                fontWeight:'bold'
+            }
         ],
         category:[ 
             s.textCenter,
@@ -58,27 +70,34 @@ const ProductsList = () => {
         rowDiv:[
             s.row,
             s.justifyContentCenter
+        ],
+        rowContainer:[
+            s.row,
+            s.justifyContentCenter,
+            {
+                marginTop:5
+            }
         ]
     }
     const updateProduct = (product)=>{
         ActionRedux.products.setCurrentProduct(product,dispatch)
         navigate('updateProduct')
     }
-    const deleteProduct = (product)=>{
-
-    }
     const showDetails = (product)=>{
+        ActionRedux.products.setCurrentProduct(product,dispatch)
         navigate('details')
     }
     return (
         <View style={styles.container}>
-            <Text style={styles.addBtn} onPress={()=>navigate('addProduct')}>+</Text>
+            {/* <ToolbarComponent {...props} /> */}
+            <Text style={styles.addBtn} onPress={()=>navigate('add')}>+</Text>
+            <CategoriesList/>
             <ScrollView horizontal={false} contentContainerStyle ={bootstrap.rowDiv}>
-                <View style={bootstrap.rowDiv} >
+                <View style={bootstrap.rowContainer} >
                     {
                         productsList.map((product,index) =>{
                             return (
-                                <View key={index} style={bootstrap.card} >
+                                <TouchableOpacity key={index} style={bootstrap.card} onPress={()=>showDetails(product)} >
                                     <View style={bootstrap.rowDiv}>
                                         <Image source={{uri:product.img}} style={styles.image} ></Image>
                                     </View>
@@ -86,9 +105,10 @@ const ProductsList = () => {
                                         <Text style={bootstrap.title} onPress={()=>showDetails(product)}>{product.name}</Text>
                                     </View>
                                     <View style={bootstrap.rowDiv}>
-                                        <Text style={bootstrap.pu}>${product.pu}</Text>
+                                        <Text style={bootstrap.pu}>{product.pu}F</Text>
+                                        <Text style={bootstrap.qte}>{product.qte}</Text>
                                     </View>
-                                </View>
+                                </TouchableOpacity>
                             )
                         })
                     }
@@ -100,7 +120,7 @@ const ProductsList = () => {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        width:"100%"
+        width:"100%",
     },
     card:{
         margin:'1%',
@@ -116,7 +136,7 @@ const styles = StyleSheet.create({
         width: 60,  
         height: 60,   
         borderRadius: 30,            
-        backgroundColor: '#4b4dc9',                                    
+        backgroundColor: primaryColor,                                    
         position: 'absolute',
         display:'flex',
         justifyContent:'center',

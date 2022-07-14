@@ -5,37 +5,21 @@ import axios from 'axios';
 import {useNavigate} from 'react-router-native'
 import { baseUrl } from '../utils/ApiInfos';
 import Cookie from 'react-native-cookie';
+import ActionRedux from '../redux/action';
+import {useDispatch} from 'react-redux';
+import { primaryColor } from '../utils/ThemeColors';
 
 export default function LoginPage() {
   const [login,setLogin] = useState('')
   const [password,setPassword] = useState('')
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const submit = ()=>{
-    axios.post(baseUrl+"api/session/login",{
-
-      "jsonrpc":"2.0",
-      "params":{
-        login,
-        password
-      }
+    ActionRedux.users.signIn(login,password,dispatch)
+    .then(response =>{
+      navigate('home')
     })
-    .then(response => {
-      console.log(response.data);
-      navigate('/home')
-      
-    })
-    .catch(error => console.log("Erreur: ", error))
-  }
-  const getProducts = ()=>{
-
-    axios.post(baseUrl+"get_categories",{})
-    .then(response => {
-      console.log(response.data);
-      // navigate('/home')
-      
-    })
-    .catch(error => console.log("Erreur: ", error))
   }
   const logout = ()=>{
 
@@ -93,9 +77,9 @@ const styles = StyleSheet.create({
   },
  
   inputView: {
-    backgroundColor: "#FFC0CB",
+    backgroundColor: "#ccc",
     borderRadius: 30,
-    width: "70%",
+    width: "80%",
     height: 45,
     marginBottom: 20,
  
@@ -121,6 +105,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 40,
-    backgroundColor: "#FF1493",
+    backgroundColor: primaryColor,
   },
+  loginText:{
+    color:'white',
+    fontWeight:'bold'
+  }
 });

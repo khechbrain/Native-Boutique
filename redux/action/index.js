@@ -1,13 +1,15 @@
 
 import categories from "./categories"
 import products from "./products"
-import approvionnements from "./approvionnements"
-import ventes from "./ventes"
+import operations from "./operations"
+import users from "./users"
+import navigations from "./navigations"
 
 const ActionRedux = {
     categories,
     products,
-    approvionnements,
-    ventes
+    operations,
+    users,
+    navigations,
 }
 export default ActionRedux

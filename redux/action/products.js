@@ -31,16 +31,25 @@ const products = {
             
         })
     },
-    setProductList(dispatch){
-        axios.post(baseUrl+"get_products",{})
-        .then(response => {
-            // console.log(response.data.result.response);
-            dispatch({type:SET_PRODUCTLIST_KEY,payload:response.data.result.response})
+    getProductList(dispatch){
+        return new Promise((resolve,reject)=>{
+            axios.post(baseUrl+"get_products",{})
+            .then(response => {
+                dispatch({type:SET_PRODUCTLIST_KEY,payload:response.data.result.response})
+                dispatch({type:SET_ALL_PRODUCTLIST_KEY,payload:response.data.result.response})
+                resolve(response)
+            })
+            .catch(error => {
+                console.log("Erreur: ", error)
+                reject(error)
+            })
         })
-        .catch(error => console.log("Erreur: ", error))
     },
     setCurrentProduct(product,dispatch){
         dispatch({type:SET_CURRENT_PRODUCT_KEY,payload:product})
     },
+    filterProducts(id,dispatch){
+        dispatch({type:FILTER_PRODUCT_LIST_KEY,payload:id})
+    }
 }
 export default products
