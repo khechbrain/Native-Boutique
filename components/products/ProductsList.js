@@ -2,17 +2,15 @@ import { Text, View,Image, ScrollView, Button, Modal, Pressable, StyleSheet, Ale
 import {useDispatch, useSelector} from 'react-redux';
 import BootstrapStyleSheet from 'react-native-bootstrap-styles';
 import ActionRedux from '../../redux/action';
-import {Route, Routes, useNavigate} from 'react-router-native'
-import { useEffect } from 'react';
 import CategoriesList from '../category/CategoriesList';
 import { primaryColor } from '../../utils/ThemeColors';
 import ToolbarComponent from '../ToolbarComponent';
+import { addProduct_KEY, detailsProduct_KEY } from '../HomePage';
 
 const ProductsList = (props) => {
     const { navigation, route } = props
     
     const dispatch = useDispatch()
-    const navigate = useNavigate()
     let productsList = useSelector(state => state.products.productList)
     // productsList = [...productsList,...productsList,...productsList,...productsList,...productsList]
 
@@ -81,16 +79,16 @@ const ProductsList = (props) => {
     }
     const updateProduct = (product)=>{
         ActionRedux.products.setCurrentProduct(product,dispatch)
-        navigate('updateProduct')
+        navigation.navigate('updateProduct')
     }
     const showDetails = (product)=>{
         ActionRedux.products.setCurrentProduct(product,dispatch)
-        navigate('details')
+        navigation.navigate(detailsProduct_KEY)
     }
     return (
         <View style={styles.container}>
-            {/* <ToolbarComponent {...props} /> */}
-            <Text style={styles.addBtn} onPress={()=>navigate('add')}>+</Text>
+            <ToolbarComponent {...props} title='Liste des produits' />
+            <Text style={styles.addBtn} onPress={()=>navigation.navigate(addProduct_KEY)}>+</Text>
             <CategoriesList/>
             <ScrollView horizontal={false} contentContainerStyle ={bootstrap.rowDiv}>
                 <View style={bootstrap.rowContainer} >

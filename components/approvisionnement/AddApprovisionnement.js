@@ -2,15 +2,18 @@ import { useState } from 'react';
 import { StyleSheet, View,TextInput, Button, Text, TouchableOpacity } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown'
 import { useSelector,useDispatch } from 'react-redux';
-import {useNavigate} from 'react-router-native'
 import ActionRedux from '../../redux/action';
 import { operationEntree } from '../../utils/OperationsTypes';
 import { primaryColor } from '../../utils/ThemeColors';
+import { listEntree_KEY } from '../HomePage';
+import ToolbarComponent from '../ToolbarComponent';
+import Toast from 'react-native-toast-message';
 
 
-const AddApprovisionnement = () => {
+const AddApprovisionnement = (props) => {
     
-    const navigate = useNavigate()
+  const { navigation, route } = props
+
     const dispatch = useDispatch()
     const productsList = useSelector(state => state.products.allProductList)
 
@@ -20,11 +23,23 @@ const AddApprovisionnement = () => {
     const submit = ()=>{
       ActionRedux.operations.addOperation(operationEntree,product_id,qte,dispatch)
       .then((response)=>{
-        navigate(-1)
+          Toast.show({
+            type: 'success',
+            text1: 'Ajout réuissi',
+            text2: 'La sortie a bien été enregistré 👍',
+            visibilityTime:2000
+          });
+          setTimeout(() => {
+            navigation.navigate(listSorties_KEY)
+          }, 2000);
       })
       .catch(error => console.log(error))
     }
     return (
+      <>
+        <View style={{zIndex:1}}>
+          <ToolbarComponent {...props} title='Faire une sortie' />
+        </View>
         <View style={styles.container}>
             <Text style={styles.titleText}>Ajouter un Stock</Text>
             <View style={styles.inputView}>
@@ -46,16 +61,23 @@ const AddApprovisionnement = () => {
             </View>
             <View style={styles.inputView}>
                 <TextInput
-                    placeholder='Quantité'
+                    keyboardType='numeric'
+                    placeholder='Nombre'
                     style={styles.TextInput}
                     placeholderTextColor="#003f5c"
-                    onChangeText={(text) => setQTE(text)}
+                    value={qte}
+                    onChangeText={(text) => {
+                      text = text.replace(/[^0-9]/g, '')
+                      return setQTE(text)
+                    }}
                     />
             </View>
             <TouchableOpacity onPress={submit} style={styles.loginBtn}>
               <Text style={styles.loginText}>Ajouter</Text>
             </TouchableOpacity>
+            <Toast ref={ref => Toast.setRef(ref)}></Toast>
         </View>
+      </>
     );
 };
 

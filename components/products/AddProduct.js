@@ -4,9 +4,12 @@ import SelectDropdown from "react-native-select-dropdown";
 import { useSelector } from "react-redux";
 import ActionRedux from "../../redux/action";
 import { primaryColor } from "../../utils/ThemeColors";
+import { listProduct_KEY } from "../HomePage";
 import ToolbarComponent from "../ToolbarComponent";
 
 const AddProduct = (props) => {
+  
+    const { navigation, route } = props
 
     const [name,setName] = useState('')
     const [description,setDescription] = useState('')
@@ -25,10 +28,14 @@ const AddProduct = (props) => {
         category_id
       }
       ActionRedux.products.addProduct(product)
+      .then(response =>{
+        navigation.navigate(listProduct_KEY)
+      })
+      .catch(error => console.log("Erreur: ", error))
     }
     return (
-        <View >
-            {/* <ToolbarComponent {...props} /> */}
+        <>
+            <ToolbarComponent {...props} title= 'Ajout de produit' />
             <View style={styles.container}>
               <Text style={styles.titleText}>Ajouter un produit</Text>
               <View style={styles.inputView}>
@@ -84,7 +91,7 @@ const AddProduct = (props) => {
                 <Text style={styles.loginText}>Ajouter</Text>
               </TouchableOpacity>
             </View>
-        </View>
+        </>
     );
 };
 
@@ -93,7 +100,7 @@ const styles = StyleSheet.create({
       width:"100%",
       flex: 1,
       alignItems: "center",
-      // justifyContent: "center",
+      justifyContent: "center",
     },
     titleText:{
       fontSize:20,

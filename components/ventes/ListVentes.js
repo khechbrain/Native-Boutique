@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Button, View, StyleSheet, TouchableOpacity,Image, ScrollView } from 'react-native';
-import {useNavigate} from 'react-router-native';
 import ActionRedux from '../../redux/action';
 import { primaryColor } from '../../utils/ThemeColors';
 import {useSelector} from 'react-redux';
 import { operationEntree, operationSortie } from '../../utils/OperationsTypes';
 import {Text,Header,CardItem} from 'native-base';
+import ToolbarComponent from '../ToolbarComponent';
+import { addSortie_KEY } from '../HomePage';
 
-const ListVentes = () => {
-    const navigate = useNavigate()
+const ListVentes = (props) => {
+    const { navigation, route } = props
 
     const operationsList = useSelector(state => state.operations.operationsList)
     const productsList = useSelector(state => state.products.allProductList)
@@ -17,40 +18,43 @@ const ListVentes = () => {
         return productsList.filter(product => product.id === id)[0]
     }
     return (
-        <View  style={styles.container}>
-            <Text style={styles.addBtn} onPress={()=>navigate('add')}>+</Text>
-            <ScrollView>
-                {
-                    operationsList.map((opera,index)=>{
-                        if(opera.operation === operationSortie){
-                            let product = getProductById(opera.product_id)
-                            return(     
-                                <View key={index}>
-                                    <CardItem style={styles.cardView}>
-                                        <View style={{flex:1}}>
-                                            <View style={styles.locationRowContainer}>
-                                                <View style={styles.imageContainer}>
-                                                    <Image style={styles.image} source={{uri:product.img}}></Image>
+        <>
+            <ToolbarComponent {...props} title='Liste des ventes' />
+            <View  style={styles.container}>
+                <Text style={styles.addBtn} onPress={()=>navigation.navigate(addSortie_KEY)}>+</Text>
+                <ScrollView>
+                    {
+                        operationsList.map((opera,index)=>{
+                            if(opera.operation === operationSortie){
+                                let product = getProductById(opera.product_id)
+                                return(     
+                                    <View key={index}>
+                                        <CardItem style={styles.cardView}>
+                                            <View style={{flex:1}}>
+                                                <View style={styles.locationRowContainer}>
+                                                    <View style={styles.imageContainer}>
+                                                        <Image style={styles.image} source={{uri:product.img}}></Image>
+                                                    </View>
+                                                    <View style={styles.addressContainer}>
+                                                        <Text style={styles.locationTitle}>
+                                                            {product.name}
+                                                        </Text>
+                                                        <Text style={styles.locationDesc}>
+                                                            Quantitée: <Text style={styles.qte}>-{opera.qte}</Text>
+                                                        </Text>
+                                                    </View>
                                                 </View>
-                                                <View style={styles.addressContainer}>
-                                                    <Text style={styles.locationTitle}>
-                                                        {product.name}
-                                                    </Text>
-                                                    <Text style={styles.locationDesc}>
-                                                        Quantitée: <Text style={styles.qte}>-{opera.qte}</Text>
-                                                    </Text>
-                                                </View>
-                                            </View>
 
-                                        </View>
-                                    </CardItem>
-                                </View>
-                            )
-                        }
-                    })
-                }
-            </ScrollView>
-        </View>
+                                            </View>
+                                        </CardItem>
+                                    </View>
+                                )
+                            }
+                        })
+                    }
+                </ScrollView>
+            </View>
+        </>
     );
 };
 const styles = StyleSheet.create({

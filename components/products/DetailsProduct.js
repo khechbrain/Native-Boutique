@@ -3,13 +3,16 @@ import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import {useSelector} from 'react-redux';
 import { primaryColor } from '../../utils/ThemeColors';
+import ToolbarComponent from '../ToolbarComponent';
 
-const DetailsProduct = () => {
+const DetailsProduct = (props) => {
     const currentProduct = useSelector(state => state.products.currentProduct)
     const operationsList = useSelector(state => state.operations.operationsList).reverse()
     console.log(currentProduct);
 
     return (
+      <>
+        <ToolbarComponent {...props} title="Détails du produit" />
         <View style={styles.container}>
             <Card style={styles.cardView}>
               <CardItem style={styles.cardView}>
@@ -28,13 +31,13 @@ const DetailsProduct = () => {
               </CardItem>
             </Card>
         </View>
+      </>
     );
 };
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        margin:10,
-        justifyContent:'center',
+        margin:10
     },
     cardView:{
       justifyContent:'center',

@@ -11,20 +11,23 @@ export const FILTER_PRODUCT_LIST_KEY = "filterProductList"
 
 const products = {
     addProduct({name,description,qte,pu,category_id}){
-        axios.post(baseUrl+"create_product",{
-            "jsonrpc":"2.0",
-            "params":{
-                name,
-                description,
-                qte,
-                pu,
-                category_id
-            }
+        return new Promise((resolve,reject)=>{
+            axios.post(baseUrl+"create_product",{
+                "jsonrpc":"2.0",
+                "params":{
+                    name,
+                    description,
+                    qte,
+                    pu,
+                    category_id
+                }
+            })
+            .then(response => {
+                console.log(response.data);
+                resolve(response.data)
+            })
+            .catch(error => console.log("Erreur: ", error))
         })
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => console.log("Erreur: ", error))
     },
     updateProduct(dispatch,formData,id){
         return new Promise((resolve,reject)=>{

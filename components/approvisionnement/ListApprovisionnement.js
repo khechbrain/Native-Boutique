@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Button, View, StyleSheet, TouchableOpacity,Image, ScrollView } from 'react-native';
-import {useNavigate} from 'react-router-native';
 import ActionRedux from '../../redux/action';
 import { primaryColor } from '../../utils/ThemeColors';
 import {useSelector} from 'react-redux';
 import { operationEntree } from '../../utils/OperationsTypes';
 
 import {Text,Header,CardItem} from 'native-base';
+import ToolbarComponent from '../ToolbarComponent';
+import { addEntree_KEY } from '../HomePage';
 
-const ListApprovisionnement = () => {
-    const navigate = useNavigate()
+const ListApprovisionnement = (props) => {
+
+    const { navigation, route } = props
 
     let operationsList = useSelector(state => state.operations.operationsList).reverse()
     const productsList = useSelector(state => state.products.allProductList)
@@ -19,7 +21,8 @@ const ListApprovisionnement = () => {
     }
     return (
         <View  style={styles.container}>
-            <Text style={styles.addBtn} onPress={()=>navigate('add')}>+</Text>
+            <ToolbarComponent {...props} title='Liste des entrés' />
+            <Text style={styles.addBtn} onPress={()=>navigation.navigate(addEntree_KEY)}>+</Text>
             <ScrollView>
                 {
                     operationsList.map((opera,index)=>{
