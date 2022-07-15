@@ -8,8 +8,13 @@ import ToolbarComponent from '../ToolbarComponent';
 const DetailsProduct = (props) => {
     const currentProduct = useSelector(state => state.products.currentProduct)
     const operationsList = useSelector(state => state.operations.operationsList).reverse()
+    const categoriesList = useSelector(state => state.categories.categoryList)
     console.log(currentProduct);
 
+    const getCategoryById = (id)=>{
+      console.log(categoriesList);
+      return categoriesList.filter(category => category.id === id)[0].name
+    }
     return (
       <>
         <ToolbarComponent {...props} title="Détails du produit" />
@@ -24,7 +29,7 @@ const DetailsProduct = (props) => {
               </CardItem>
               <CardItem>
                   <Text style={styles.locationTitleContainer}>Quantité: <Text style={styles.locationTitle}>{currentProduct.qte}</Text></Text>
-                  <Text style={styles.locationPUContainer}>Prix Totale: <Text style={styles.locationPU}>{currentProduct.prix_total}F</Text></Text>
+                  <Text style={styles.locationPUContainer}>Catégorie: <Text style={styles.locationPU}>{getCategoryById(currentProduct.category_id)}</Text></Text>
               </CardItem>
               <CardItem style={styles.cardView}>
                   <Text style={styles.locationDesc}>{currentProduct.description}</Text>

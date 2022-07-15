@@ -103,8 +103,8 @@ const ProductsList = (props) => {
                                         <Text style={bootstrap.title} onPress={()=>showDetails(product)}>{product.name}</Text>
                                     </View>
                                     <View style={bootstrap.rowDiv}>
-                                        <Text style={bootstrap.pu}>{product.pu}F</Text>
-                                        <Text style={bootstrap.qte}>{product.qte}</Text>
+                                        <Text style={bootstrap.pu}>prix: <Text style={bootstrap.qte}>{product.pu}F</Text></Text>
+                                        <Text>qt: <Text style={bootstrap.qte}>{product.qte}</Text></Text>
                                     </View>
                                 </TouchableOpacity>
                             )
